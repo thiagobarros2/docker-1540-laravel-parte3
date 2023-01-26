@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::redirect('/', 'series');
+
 Route::get('/series', 'SeriesController@index')
     ->name('listar_series');
 Route::get('/series/criar', 'SeriesController@create')
