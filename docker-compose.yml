@@ -9,9 +9,9 @@ services:
       - php
     ports:
       - "8001:80"
-    working_dir: /var/www/laravel-laravel
+    working_dir: /var/www/laravel
     volumes:
-      - ./:/var/www/laravel-laravel
+      - ./:/var/www/laravel
       - ./docker/nginx/:/etc/nginx/conf.d/
   php:
     container_name: laravel-php
@@ -20,10 +20,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    working_dir: /var/www/laravel-laravel
+    working_dir: /var/www/laravel
     volumes:
-      - .:/var/www/laravel-laravel
-      - /var/www/laravel-laravel/vendor
+      - .:/var/www/laravel
+      - /var/www/laravel/vendor
   postgres:
     container_name: laravel-postgres
     build:
