@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: laravel-nginx
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - php
+    ports:
+      - "8001:80"
+    working_dir: /var/www/laravel-laravel
+    volumes:
+      - ./:/var/www/laravel-laravel
+      - ./docker/nginx/:/etc/nginx/conf.d/
+  php:
+    container_name: laravel-php
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    working_dir: /var/www/laravel-laravel
+    volumes:
+      - .:/var/www/laravel-laravel
+      - /var/www/laravel-laravel/vendor
+  postgres:
+    container_name: laravel-postgres
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./docker/postgres/database:/var/lib/postgresql/data
+      - ./docker/postgres/dumps/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/postgres/dumps:/dumps
+      - ./docker/postgres/scripts:/scripts
+  redis:
+    container_name: laravel-redis
+    image: redis:alpine
+    restart: always
+    ports:
+      - "63379:6379"
