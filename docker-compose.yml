@@ -39,9 +39,3 @@ services:
       - ./docker/postgres/dumps/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./docker/postgres/dumps:/dumps
       - ./docker/postgres/scripts:/scripts
-  redis:
-    container_name: laravel-redis
-    image: redis:alpine
-    restart: always
-    ports:
-      - "63379:6379"
