@@ -4,12 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Serie;
-use App\Episodio;
-use App\Temporada;
 use Illuminate\Http\Request;
 use App\Services\CriadorDeSerie;
 use App\Services\RemovedorDeSerie;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeriesFormRequest;
 
 class SeriesController extends Controller
@@ -48,7 +45,8 @@ class SeriesController extends Controller
                 $request->qtd_temporadas,
                 $request->ep_por_temporada
             );
-            $delay = now()->addSecond(2) * $key;
+            $delay = now()->addSecond($key * 2);
+
             \Illuminate\Support\Facades\Mail::to($usuario)->later($delay, $email);
         }
         
