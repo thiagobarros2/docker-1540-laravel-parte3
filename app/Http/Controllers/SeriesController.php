@@ -40,15 +40,16 @@ class SeriesController extends Controller
             $request->ep_por_temporada
         );
 
-        $users = User::all();
-        foreach($users as $user){
+        $usuarios = User::all();
+        foreach($usuarios as $key => $usuario){
+
             $email = new \App\Mail\NovaSerieMail(
                 $request->nome,
                 $request->qtd_temporadas,
                 $request->ep_por_temporada
             );
-            \Illuminate\Support\Facades\Mail::to($user)->send($email);
-            sleep(2);
+            $delay = now()->addSecond(2) * $key;
+            \Illuminate\Support\Facades\Mail::to($usuario)->later($delay, $email);
         }
         
         $request->session()
