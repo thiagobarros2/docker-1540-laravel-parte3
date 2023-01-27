@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Serie;
 use Illuminate\Http\Request;
+use App\Events\NovaSerieEvent;
 use App\Services\CriadorDeSerie;
 use App\Services\RemovedorDeSerie;
 use App\Http\Requests\SeriesFormRequest;
@@ -37,8 +38,15 @@ class SeriesController extends Controller
             $request->ep_por_temporada
         );
 
+        $evento_nova_serie = new NovaSerieEvent(
+            $request->nome,
+            $request->qtd_temporadas,
+            $request->ep_por_temporada
+        );
+        event($evento_nova_serie);
+
         $usuarios = User::all();
-        foreach($usuarios as $key => $usuario){
+        foreach ($usuarios as $key => $usuario) {
 
             $email = new \App\Mail\NovaSerieMail(
                 $request->nome,
@@ -49,7 +57,7 @@ class SeriesController extends Controller
 
             \Illuminate\Support\Facades\Mail::to($usuario)->later($delay, $email);
         }
-        
+
         $request->session()
             ->flash(
                 'mensagem',
